@@ -2,6 +2,8 @@ package ie.cm.fragments;
 
 import ie.cm.activities.Base;
 import ie.cm.activities.Edit;
+import ie.cm.activities.Favourites;
+import ie.cm.adapters.CoffeeFilter;
 import ie.cm.adapters.CoffeeListAdapter;
 import ie.cm.models.Coffee;
 
@@ -22,12 +24,16 @@ public class CoffeeFragment  extends ListFragment implements  OnClickListener
   protected static  CoffeeListAdapter 	listAdapter;
   protected         ListView 			listView;
 
+  protected  CoffeeFilter coffeeFilter;
+
   public CoffeeFragment() {
     // Required empty public constructor
   }
 
   public static CoffeeFragment newInstance() {
     CoffeeFragment fragment = new CoffeeFragment();
+
+
     return fragment;
   }
 @Override
@@ -35,6 +41,14 @@ public class CoffeeFragment  extends ListFragment implements  OnClickListener
   {
     super.onAttach(context);
     this.activity = (Base) context;
+
+
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
   }
 
   @Override
@@ -42,6 +56,16 @@ public class CoffeeFragment  extends ListFragment implements  OnClickListener
     super.onCreate(savedInstanceState);
 
     listAdapter = new CoffeeListAdapter(activity, this, Base.coffeeList);
+    coffeeFilter = new CoffeeFilter(Base.coffeeList,"all",listAdapter);
+    if (getActivity() instanceof Favourites) {
+      coffeeFilter.setFilter("favourites"); // Set the filter text field from
+
+      coffeeFilter.filter(null); // Filter the data, but don't use any prefix
+      listAdapter.notifyDataSetChanged();
+    }
+
+
+
     setListAdapter (listAdapter);
   }
      
@@ -49,6 +73,8 @@ public class CoffeeFragment  extends ListFragment implements  OnClickListener
   public void onStart()
   {
     super.onStart();
+
+
   }
 
   @Override
